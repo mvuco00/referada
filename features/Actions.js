@@ -5,6 +5,7 @@ import FindRecordDialog from "./FindRecordDialog";
 import AddStudentDialog from "./AddStudentDialog";
 import UpdateStudentDialog from "./UpdateStudentDialog";
 import TransferDialog from "./TransferDialog";
+import DeleteDialog from "./DeleteDialog";
 
 const Actions = () => {
   const classes = useStyles();
@@ -51,20 +52,32 @@ const Actions = () => {
       >
         Student transfer
       </Button>
+      <Button
+        variant="outlined"
+        color="primary"
+        disableElevation
+        className={classes.button}
+        onClick={() => openDialog("delete")}
+      >
+        Delete student record
+      </Button>
 
       {open === "find-record" && (
-        <FindRecordDialog open={open} onClose={() => setOpen(null)} />
+        <FindRecordDialog open={open === "find-record"} onClose={() => setOpen(null)} />
       )}
 
       {open === "add-record" && (
-        <AddStudentDialog open={open} onClose={() => setOpen(null)} />
+        <AddStudentDialog open={open === "add-record"} onClose={() => setOpen(null)} />
       )}
 
       {open === "update-record" && (
-        <UpdateStudentDialog open={open} onClose={() => setOpen(null)} />
+        <UpdateStudentDialog open={open === "update-record"} onClose={() => setOpen(null)} />
       )}
       {open === "transfer" && (
-        <TransferDialog open={open} onClose={() => setOpen(null)} />
+        <TransferDialog open={open === "transfer"} onClose={() => setOpen(null)} />
+      )}
+      {open === "delete" && (
+        <DeleteDialog open={open === "delete"} onClose={() => setOpen(null)} />
       )}
     </Box>
   );
