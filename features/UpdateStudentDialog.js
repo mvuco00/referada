@@ -1,5 +1,7 @@
+import { useState } from "react";
 import {
   Button,
+  Box,
   Dialog,
   DialogActions,
   DialogContent,
@@ -8,9 +10,37 @@ import {
   TextField,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import axios from "axios";
 
 const UpdateStudentDialog = ({ open, onClose }) => {
   const classes = useStyles();
+  const [studentId, setStudentId] = useState("");
+  const [responseId, setResponseId] = useState(null);
+  const [name, setName] = useState("");
+  const [level, setLevel] = useState("");
+  const [grade, setGrade] = useState("");
+
+  console.log(responseId);
+
+  const handleFindStudent = async (e) => {
+    e.preventDefault();
+    const res = await axios.post(
+      `http://localhost:8080/student/readAsset/${studentId}`
+    );
+    setResponseId(res?.data);
+    setName(res?.data?.Name);
+    setGrade(res?.data?.Grade);
+    setLevel(res?.data?.Level);
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    const res = await axios.post(
+      `http://localhost:8080/student/updateAsset/${studentId}/${name}/${responseId.Collage}/${grade}/${level}`
+    );
+    console.log(res);
+  };
+
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Update student information</DialogTitle>
@@ -22,28 +52,52 @@ const UpdateStudentDialog = ({ open, onClose }) => {
           label="Student ID"
           fullWidth
           className={classes.input}
+          onChange={(event) => setStudentId(event.target.value)}
         />
-        <TextField
-          variant="outlined"
-          label="Student name"
-          fullWidth
-          className={classes.input}
-        />
+        {responseId && (
+          <Box>
+            <TextField
+              variant="outlined"
+              label="Student name"
+              fullWidth
+              className={classes.input}
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+            />
+            <TextField
+              variant="outlined"
+              label="Level"
+              fullWidth
+              className={classes.input}
+              value={level}
+              onChange={(event) => setLevel(event.target.value)}
+            />
 
-        <TextField
-          variant="outlined"
-          label="Student grade"
-          fullWidth
-          className={classes.input}
-        />
+            <TextField
+              variant="outlined"
+              label="Student grade"
+              fullWidth
+              className={classes.input}
+              value={grade}
+              onChange={(event) => setGrade(event.target.value)}
+            />
+          </Box>
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={onClose} color="primary">
-          Submit
-        </Button>
+        {!responseId && (
+          <Button onClick={(e) => handleFindStudent(e)} color="primary">
+            Find
+          </Button>
+        )}
+        {responseId && (
+          <Button onClick={(e) => handleUpdate(e)} color="primary">
+            Update
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

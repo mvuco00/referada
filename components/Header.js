@@ -6,7 +6,7 @@ const Header = () => {
   return (
     <AppBar position="static" className={classes.appbar}>
       <Toolbar className={classes.toolbar}>
-        <Typography variant="h6">eduRecords</Typography>
+        <Typography variant="h6">e-Referada</Typography>
       </Toolbar>
     </AppBar>
   );
